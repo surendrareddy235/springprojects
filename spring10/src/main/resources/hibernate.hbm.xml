@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hibernate-mapping>
-<class name="spring10.Signup" table="signup">
- <id name="username" column="username">
-            <generator class="assigned"/>
-        </id>
-<property name="password" column="password"></property>
-</class>
-</hibernate-mapping>

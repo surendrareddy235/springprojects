@@ -1,0 +1,56 @@
+@charset "UTF-8";
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.order-confirmation-container {
+    width: 50%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+.plant-details {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.plant-image {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.user-details {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.user-details p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}

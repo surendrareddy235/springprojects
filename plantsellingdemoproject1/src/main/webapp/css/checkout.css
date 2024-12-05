@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.checkout-container {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #555;
+}
+
+.plant-details {
+    margin-bottom: 20px;
+}
+
+.plant-image {
+    width: 200px;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.user-details {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.user-details label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.user-details input, .user-details textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.plant-count {
+    margin-bottom: 20px;
+}
+
+.plant-count label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.plant-count input {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.payment-details {
+    margin: 20px 0;
+    color: #333;
+}
+
+.payment-details p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}

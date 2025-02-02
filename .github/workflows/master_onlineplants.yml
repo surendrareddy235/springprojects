@@ -23,13 +23,13 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        working-directory: plantsellingdemoproject1  # Set correct project path
+        working-directory: plantsellingdemoproject1  # Ensure the correct project path
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: 'plantsellingdemoproject1/target/*.jar'  # Correct artifact path
+          path: 'plantsellingdemoproject1/target/*.jar'  # Ensure correct artifact path
 
   deploy:
     runs-on: windows-latest
@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: 'plantsellingdemoproject1/target/*.jar'  # Correct deployment path
+          package: 'java-app/*.jar'  # Corrected artifact path for deployment

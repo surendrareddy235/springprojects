@@ -26,12 +26,14 @@ jobs:
         working-directory: plantsellingdemoproject1  # Set correct project path
 
       - name: List target directory (debugging)
-        run: ls -R ${{ github.workspace }}/plantsellingdemoproject1/target
+        run: |
+          echo "Listing files in target directory..."
+          Get-ChildItem -Path ${{ github.workspace }}/plantsellingdemoproject1/target -Recurse
 
       - name: List Artifacts
         run: |
           echo "Listing files in target directory..."
-          ls -alh ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar
+          Get-ChildItem -Path ${{ github.workspace }}/plantsellingdemoproject1/target -Recurse
           echo "Artifact files listed successfully."
 
       - name: Upload artifact for deployment job
@@ -59,7 +61,7 @@ jobs:
       - name: List downloaded artifact (debugging)
         run: |
           echo "Listing downloaded files..."
-          ls -alh ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar
+          Get-ChildItem -Path ${{ github.workspace }}/plantsellingdemoproject1/target -Recurse
           echo "Artifact files listed successfully."
 
       - name: Login to Azure

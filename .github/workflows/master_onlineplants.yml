@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # Required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -26,12 +26,13 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        working-directory: plantsellingdemoproject1  # Ensure the correct project path
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: 'plantsellingdemoproject1/target/*.jar'  # Ensure correct artifact path
 
   deploy:
     runs-on: windows-latest
@@ -40,21 +41,21 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write # Required for requesting the JWT
+      contents: read # Required for actions/checkout
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C97166C715CA467CB7BD473762EDFBE6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_23D5E1E472FE42AE8BC24889462E3583 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EB2F430A049844159455933B3D871949 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_57830054021144BA918B46AD235E34A6 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CB688406321D4FEC9A2B06B8BC0868E1 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F15253B35AE24AFF8B828FDD41440114 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,5 +63,6 @@ jobs:
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'java-app/*.jar'  # Corrected artifact path for deployment
+
           

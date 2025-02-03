@@ -1,7 +1,8 @@
-
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - onlineplants
+
 on:
   push:
     branches:
@@ -12,9 +13,10 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read  # Required for actions/checkout
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Java version
         uses: actions/setup-java@v4
@@ -23,14 +25,17 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean install
-        working-directory: plantsellingdemoproject1   # Added this to run Maven in the correct directory
+        run: |
+          mvn clean install
+          echo "Checking target directory contents:"
+          dir plantsellingdemoproject1/target
+        working-directory: plantsellingdemoproject1
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: plantsellingdemoproject1/target/*.jar  # Updated to use the correct target path
+          path: plantsellingdemoproject1/target/  # Upload entire target folder
 
   deploy:
     runs-on: windows-latest
@@ -39,8 +44,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read # This is required for actions/checkout
+      id-token: write  # Required for requesting the JWT
+      contents: read  # Required for actions/checkout
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -61,4 +66,4 @@ jobs:
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: '${{ github.workspace }}/java-app'  
+          package: '${{ github.workspace }}/java-app/*.jar'  # Ensure it targets the JAR file inside target/

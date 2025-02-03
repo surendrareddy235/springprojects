@@ -28,14 +28,14 @@ jobs:
         run: |
           mvn clean install
           echo "Checking target directory contents:"
-          dir target
-        working-directory: ${{ github.workspace }}/plantsellingdemoproject1  # Corrected path
+          if [ -d "target" ]; then ls target; else echo "Target directory missing!"; exit 1; fi
+        working-directory: ${{ github.workspace }}/plantsellingdemoproject1  # ✅ Confirm this is correct!
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar  # Corrected path
+          path: ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar  # ✅ Ensure JAR exists here!
 
   deploy:
     runs-on: windows-latest
@@ -51,7 +51,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/java-app'
+          path: ${{ github.workspace }}/java-app  # ✅ Corrected
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: '${{ github.workspace }}/java-app/*.jar'  # Corrected path
+          package: ${{ github.workspace }}/java-app/*.jar  # ✅ Ensure JAR is present here!

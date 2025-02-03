@@ -25,8 +25,12 @@ jobs:
 
       # Step 3: Build the project with Maven
       - name: Build with Maven
-        run: mvn clean install
-        working-directory: plantsellingdemoproject1  # Ensure this is the correct project path
+        run: |
+          mvn clean install
+          echo "Checking target directory contents:"
+          dir target
+        working-directory: ${{ github.workspace }}  # Removed extra subfolder
+
 
       # Step 4: Debugging - List files in the target directory
       - name: List target directory (debugging)
@@ -39,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar  # Ensure this path is correct
+          path: ${{ github.workspace }}/target/*.jar  # Adjusted path
 
   deploy:
     runs-on: windows-latest

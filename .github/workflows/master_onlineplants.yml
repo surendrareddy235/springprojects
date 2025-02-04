@@ -1,4 +1,4 @@
-name: Build and deploy JAR app to Azure Web App - onlineplants
+name: Build and deploy WAR app to Azure Web App - onlineplants
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -22,14 +22,14 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        working-directory: plantsellingdemoproject1  # Change this to the correct directory
+        working-directory: plantsellingdemoproject1
         run: mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/plantsellingdemoproject1/target/*.jar'  # Update the path accordingly
+          path: '${{ github.workspace }}/plantsellingdemoproject1/target/*.war'  # Updated to .war
 
   deploy:
     runs-on: windows-latest
@@ -38,8 +38,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: '*.jar'
+          package: '*.war'  # Updated to .war

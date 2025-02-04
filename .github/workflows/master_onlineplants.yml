@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - onlineplants
 
 on:
@@ -10,40 +13,25 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # Required for actions/checkout
+      contents: read #This is required for actions/checkout
 
     steps:
-      # Step 1: Checkout the code
       - uses: actions/checkout@v4
 
-      # Step 2: Set up Java
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'microsoft'
 
-      # Step 3: Build the project with Maven
       - name: Build with Maven
-        run: |
-          mvn clean install
-          echo "Checking target directory contents:"
-          dir target
-        working-directory: ${{ github.workspace }}  # Removed extra subfolder
+        run: mvn clean install
 
-
-      # Step 4: Debugging - List files in the target directory
-      - name: List target directory (debugging)
-        run: |
-          echo "Listing files in target directory..."
-          Get-ChildItem -Path ${{ github.workspace }}/plantsellingdemoproject1/target -Recurse
-
-      # Step 5: Upload the JAR file as an artifact
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: ${{ github.workspace }}/target/*.jar  # Adjusted path
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: windows-latest
@@ -52,37 +40,27 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Required for requesting the JWT
-      contents: read # Required for actions/checkout
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-      # Step 1: Download the artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: ${{ github.workspace }}/plantsellingdemoproject1/target  # Ensure this path matches the upload path
-
-      # Step 2: Debugging - List downloaded files
-      - name: List downloaded artifact (debugging)
-        run: |
-          echo "Listing downloaded files..."
-          Get-ChildItem -Path ${{ github.workspace }}/plantsellingdemoproject1/target -Recurse
-          echo "Artifact files listed successfully."
-
-      # Step 3: Login to Azure
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_57830054021144BA918B46AD235E34A6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CB688406321D4FEC9A2B06B8BC0868E1 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F15253B35AE24AFF8B828FDD41440114 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_39486347DC584D29A2AA829537C190ED }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2739F2AD8A8640C88284240DC2FD5618 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0EC1AF8176EA464CA3F8E7E7C927F2FD }}
 
-      # Step 4: Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'onlineplants'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/plantsellingdemoproject1/target/*.jar  # Ensure this path is correct
+          package: '*.jar'
+          

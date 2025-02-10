@@ -13,11 +13,10 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # Required for actions/checkout
+      contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Java version
         uses: actions/setup-java@v4
@@ -27,13 +26,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        working-directory: plantsellingdemoproject1  # Fix: Set the correct project path
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: plantsellingdemoproject1/target/*.war  # Fix: Correct WAR file path
+          path: target/*.war  # ✅ This ensures the WAR file is stored correctly
 
   deploy:
     runs-on: windows-latest
@@ -42,21 +40,22 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Required for requesting the JWT
-      contents: read # Required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
-      
+          path: target  # ✅ This ensures the artifact is placed in the right directory
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_472F5A7A0CBF446B9CD99C49D3E69F46 }}
-           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_16EC1097DC094A189DA6D94471C148A5 }}
-           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AA93075602504DABAD8EAA11971968FC }}
+          client-id: '472F5A7A0CBF446B9CD99C49D3E69F46'
+          tenant-id: '16EC1097DC094A189DA6D94471C148A5'
+          subscription-id: 'AA93075602504DABAD8EAA11971968FC'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -64,5 +63,4 @@ jobs:
         with:
           app-name: 'plantselling'
           slot-name: 'Production'
-          package: java-app/*.war  # Fix: Use correct artifact name
-          
+          package: target/*.war  # ✅ Correct WAR file path for deployment

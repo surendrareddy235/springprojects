@@ -13,10 +13,12 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensures full repo is checked out
 
       - name: Set up Java version
         uses: actions/setup-java@v4
@@ -26,12 +28,13 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        working-directory: ./plantsellingdemoproject1  # Ensure correct project directory
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.war'
+          path: plantsellingdemoproject1/target/*.war  # Corrected path
 
   deploy:
     runs-on: windows-latest
@@ -40,8 +43,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read  # This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -62,4 +65,5 @@ jobs:
         with:
           app-name: 'plantselling'
           slot-name: 'Production'
-          package: '*.war'
+          package: './java-app/*.war'  # Corrected path
+

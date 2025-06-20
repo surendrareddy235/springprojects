@@ -10,7 +10,7 @@ public class SignupDao {
 
     private static final String URL = "jdbc:mysql://localhost:3306/school";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "19030ee235";
+    private static final String PASSWORD = "***********";
 
     public SignupDao() {
         try {
